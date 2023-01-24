@@ -13,7 +13,8 @@ export default function PaymentElementMultipleAccounts() {
       <Head>
         <title>Demo</title>
       </Head>
-      <h1>Payment Element + Multiple Accounts</h1>
+      <h1 className="text-3xl mb-6">Payment Element + Multiple Accounts</h1>
+      <h2 className="text-2xl mb-3">Country</h2>
       <Select
         selected={country}
         setSelect={setCountry}

@@ -3,7 +3,7 @@ import styles from "./select.module.css";
 export default function Select({ selected, setSelect, options }) {
   return (
     <select
-      className={styles.select}
+      className="w-1/2 px-4 py-3 rounded"
       value={selected}
       onChange={(e) => setSelect(e.target.value)}
     >
