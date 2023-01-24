@@ -9,9 +9,11 @@ export default function Home() {
       <Head>
         <title>Demo</title>
       </Head>
-      <h1>Stripe Demos</h1>
+      <h1 className="text-4xl mb-4">Stripe Demos</h1>
       <Link href="/demos/pe-multi-accounts">
-        <p>Payment Element integration with multiple accounts</p>
+        <p>
+          &#10145;&#65039; Payment Element integration with multiple accounts
+        </p>
       </Link>
     </Layout>
   );
