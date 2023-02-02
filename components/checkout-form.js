@@ -15,7 +15,6 @@ export const countryInEurope = (country) => {
 };
 
 export default function CheckoutForm({
-  address,
   handleAddressUpdate,
   currency,
   setCurrency,
@@ -26,6 +25,7 @@ export default function CheckoutForm({
 
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [address, setAddress] = React.useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,6 +48,7 @@ export default function CheckoutForm({
 
     const data = {
       country: address.country || "US",
+      currency: currency,
       payment_method_id: paymentMethod.id,
     };
 
@@ -68,16 +69,12 @@ export default function CheckoutForm({
       if (errorAction) {
         setMessage(errorAction);
       } else {
-        setPaymentComplete();
+        setPaymentComplete(true);
       }
     } else {
-      setPaymentComplete();
+      setPaymentComplete(true);
     }
   };
-
-  if (stripe) {
-    console.log("what key I am using", stripe._apiKey);
-  }
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
@@ -88,10 +85,12 @@ export default function CheckoutForm({
       <AddressElement
         options={{
           mode: "billing",
-          defaultValues: { address },
           display: { name: "organization" },
         }}
-        onChange={(e) => handleAddressUpdate(e.value.address)}
+        onChange={(e) => {
+          setAddress(e.value.address);
+          handleAddressUpdate(e.value.address);
+        }}
       />
 
       <h2 className="text-xl mb-3 mt-3">2. Payment method</h2>

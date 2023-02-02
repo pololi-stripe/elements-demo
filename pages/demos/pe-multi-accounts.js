@@ -6,7 +6,7 @@ import CheckoutForm, { countryInEurope } from "../../components/checkout-form";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-const PaymentComplete = () => {
+const PaymentComplete = ({ messages }) => {
   return (
     <Layout>
       <Head>
@@ -23,42 +23,83 @@ const PaymentComplete = () => {
       >
         Payment Succeed!
       </div>
+
+      <div className="bg-slate-200 rounded-md my-5 p-5">
+        {messages.map((m) => (
+          <p key={`msg-${m.id}`} className="text-slate-600">
+            {m.id}: {m.message}
+          </p>
+        ))}
+      </div>
     </Layout>
   );
 };
 
-const useEuAccount = (currency) => currency === "EUR";
-
-const usStripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
+const stripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
   betas: ["elements_enable_deferred_intent_beta_1"],
 });
 
-const euStripe = loadStripe(process.env.NEXT_PUBLIC_EU_STRIPE_PK, {
-  betas: ["elements_enable_deferred_intent_beta_1"],
-});
+let nextId = 0;
 
 export default function PaymentElementMultipleAccounts() {
   const [paymentComplete, setPaymentComplete] = useState(false);
-
-  if (paymentComplete) {
-    return <PaymentComplete />;
-  }
-
   const [currency, setCurrency] = useState("usd");
-  const [address, setAddress] = useState({});
+  const [publicKey, setPublicKey] = useState(
+    process.env.NEXT_PUBLIC_US_STRIPE_PK
+  );
+  const [messages, setMessages] = useState([
+    {
+      id: nextId,
+      message: "default to use United States account PK",
+    },
+  ]);
+
+  const handleAddressUpdate = (newAddress) => {
+    if (countryInEurope(newAddress.country)) {
+      if (publicKey !== process.env.NEXT_PUBLIC_EU_STRIPE_PK) {
+        setPublicKey(process.env.NEXT_PUBLIC_EU_STRIPE_PK);
+        stripe._apiKey = process.env.NEXT_PUBLIC_EU_STRIPE_PK;
+
+        nextId = nextId + 1;
+        setMessages([
+          ...messages,
+          {
+            id: nextId,
+            message: "change to use Europe account PK",
+          },
+        ]);
+      }
+    } else {
+      if (publicKey !== process.env.NEXT_PUBLIC_US_STRIPE_PK) {
+        setPublicKey(process.env.NEXT_PUBLIC_US_STRIPE_PK);
+        stripe._apiKey = process.env.NEXT_PUBLIC_US_STRIPE_PK;
+
+        nextId = nextId + 1;
+        setMessages([
+          ...messages,
+          {
+            id: nextId,
+            message: "change to use United States account PK",
+          },
+        ]);
+      }
+      if (currency !== "usd") {
+        setCurrency("usd");
+      }
+    }
+  };
+
   const options = {
     mode: "payment",
     amount: 1099,
     currency: currency,
     appearance: { theme: "stripe" },
+    public_key: publicKey,
   };
 
-  const handleAddressUpdate = (newAddress) => {
-    setAddress(newAddress);
-    if (!countryInEurope(newAddress.country)) {
-      setCurrency("usd");
-    }
-  };
+  if (paymentComplete) {
+    return <PaymentComplete messages={messages} />;
+  }
 
   return (
     <Layout>
@@ -69,27 +110,21 @@ export default function PaymentElementMultipleAccounts() {
         <TestModeBadge />
         PE + Multiple Accounts
       </h1>
-      {useEuAccount(currency) ? (
-        <Elements options={options} stripe={euStripe}>
-          <CheckoutForm
-            address={address}
-            handleAddressUpdate={handleAddressUpdate}
-            currency={currency}
-            setCurrency={setCurrency}
-            setPaymentComplete={setPaymentComplete}
-          />
-        </Elements>
-      ) : (
-        <Elements options={options} stripe={usStripe}>
-          <CheckoutForm
-            address={address}
-            handleAddressUpdate={handleAddressUpdate}
-            currency={currency}
-            setCurrency={setCurrency}
-            setPaymentComplete={setPaymentComplete}
-          />
-        </Elements>
-      )}
+      <Elements options={options} stripe={stripe}>
+        <CheckoutForm
+          handleAddressUpdate={handleAddressUpdate}
+          currency={currency}
+          setCurrency={setCurrency}
+          setPaymentComplete={setPaymentComplete}
+        />
+      </Elements>
+      <div className="bg-slate-200 rounded-md my-5 p-5">
+        {messages.map((m) => (
+          <p key={`msg-${m.id}`} className="text-slate-600">
+            {m.id}: {m.message}
+          </p>
+        ))}
+      </div>
     </Layout>
   );
 }

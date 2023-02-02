@@ -1,11 +1,11 @@
 const mxStripe = require("stripe")(process.env.MX_STRIPE_SK);
 const usStripe = require("stripe")(process.env.US_STRIPE_SK);
+const euStripe = require("stripe")(process.env.EU_STRIPE_SK);
 
 export default async function handler(req, res) {
-  const { country, payment_method_id } = req.body;
+  const { country, currency, payment_method_id } = req.body;
 
-  const stripe = country === "MX" ? mxStripe : usStripe;
-  const currency = country === "MX" ? "mxn" : "usd";
+  const stripe = country === "US" ? usStripe : euStripe;
 
   try {
     const intent = await stripe.paymentIntents.create({
