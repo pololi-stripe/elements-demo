@@ -1,1 +1,4 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# Dev
+
+1. `yarn install`
+2. `yarn run dev`
