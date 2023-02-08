@@ -1,38 +1,66 @@
 import Head from "next/head";
-import Layout from "../../components/layout";
-import Select from "../../components/select";
 import { useState } from "react";
-import MxCheckout from "../../components/mx-checkout";
-import UsCheckout from "../../components/us-checkout";
+import Layout from "../../components/layout";
+import TestModeBadge from "../../components/test-mode-badge";
+import CheckoutForm, { countryInEurope } from "../../components/checkout-form";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
-const countryOptions = ["USA", "Mexico"];
+const PaymentComplete = ({ messages }) => {
+  return (
+    <Layout>
+      <Head>
+        <title>Demo</title>
+      </Head>
+      <h1 className="text-3xl mb-6">
+        <TestModeBadge />
+        Payment Element + Multiple Accounts
+      </h1>
+
+      <div
+        className="p-4 my-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+        role="alert"
+      >
+        Payment Succeed!
+      </div>
+
+      <div className="bg-slate-200 rounded-md my-5 p-5">
+        {messages.map((value, index) => (
+          <p key={`msg-${index}`} className="text-slate-600">
+            {index}: {value.message}
+          </p>
+        ))}
+      </div>
+    </Layout>
+  );
+};
+
+const stripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
+  betas: ["elements_enable_deferred_intent_beta_1"],
+});
 
 export default function PaymentElementMultipleAccounts() {
-  const [country, setCountry] = useState("USA");
   const [paymentComplete, setPaymentComplete] = useState(false);
-  const markPaymentComplete = () => setPaymentComplete(true);
+  const [currency, setCurrency] = useState("usd");
+  const [messages, setMessages] = useState([
+    {
+      message: "default to use United States account PK",
+    },
+  ]);
+
+  const addNewMessage = (newMessage) => {
+    setMessages([...messages, newMessage]);
+  };
+
+  const options = {
+    mode: "payment",
+    amount: 1099,
+    currency: currency,
+    appearance: { theme: "stripe" },
+  };
 
   if (paymentComplete) {
-    return (
-      <Layout>
-        <Head>
-          <title>Demo</title>
-        </Head>
-        <h1 className="text-3xl mb-6">Payment Element + Multiple Accounts</h1>
-        <div
-          className="bg-orange-300 rounded-lg py-3 px-3 mb-4 text-base text-gray-800"
-          role="alert"
-        >
-          TEST MODE
-        </div>
-        <div
-          className="p-4 my-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-          role="alert"
-        >
-          Payment Succeed!
-        </div>
-      </Layout>
-    );
+    return <PaymentComplete messages={messages} />;
   }
 
   return (
@@ -40,24 +68,25 @@ export default function PaymentElementMultipleAccounts() {
       <Head>
         <title>Demo</title>
       </Head>
-      <h1 className="text-3xl mb-6">Payment Element + Multiple Accounts</h1>
-      <div
-        className="bg-orange-300 rounded-lg py-3 px-3 mb-4 text-base text-gray-800"
-        role="alert"
-      >
-        TEST MODE
+      <h1 className="text-3xl mb-6">
+        <TestModeBadge />
+        PE + Multiple Accounts
+      </h1>
+      <Elements options={options} stripe={stripe}>
+        <CheckoutForm
+          currency={currency}
+          setCurrency={setCurrency}
+          setPaymentComplete={setPaymentComplete}
+          addNewMessage={addNewMessage}
+        />
+      </Elements>
+      <div className="bg-slate-200 rounded-md my-5 p-5">
+        {messages.map((value, index) => (
+          <p key={`msg-${index}`} className="text-slate-600">
+            {index}: {value.message}
+          </p>
+        ))}
       </div>
-      <h2 className="text-2xl mb-3">Country</h2>
-      <Select
-        selected={country}
-        setSelect={setCountry}
-        options={countryOptions}
-      />
-      {country === "Mexico" ? (
-        <MxCheckout markPaymentComplete={markPaymentComplete} />
-      ) : (
-        <UsCheckout markPaymentComplete={markPaymentComplete} />
-      )}
     </Layout>
   );
 }
