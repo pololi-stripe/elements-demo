@@ -25,9 +25,9 @@ const PaymentComplete = ({ messages }) => {
       </div>
 
       <div className="bg-slate-200 rounded-md my-5 p-5">
-        {messages.map((m) => (
-          <p key={`msg-${m.id}`} className="text-slate-600">
-            {m.id}: {m.message}
+        {messages.map((value, index) => (
+          <p key={`msg-${index}`} className="text-slate-600">
+            {index}: {value.message}
           </p>
         ))}
       </div>
@@ -39,54 +39,17 @@ const stripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
   betas: ["elements_enable_deferred_intent_beta_1"],
 });
 
-let nextId = 0;
-
 export default function PaymentElementMultipleAccounts() {
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [currency, setCurrency] = useState("usd");
-  const [publicKey, setPublicKey] = useState(
-    process.env.NEXT_PUBLIC_US_STRIPE_PK
-  );
   const [messages, setMessages] = useState([
     {
-      id: nextId,
       message: "default to use United States account PK",
     },
   ]);
 
-  const handleAddressUpdate = (newAddress) => {
-    if (countryInEurope(newAddress.country)) {
-      if (publicKey !== process.env.NEXT_PUBLIC_EU_STRIPE_PK) {
-        setPublicKey(process.env.NEXT_PUBLIC_EU_STRIPE_PK);
-        stripe._apiKey = process.env.NEXT_PUBLIC_EU_STRIPE_PK;
-
-        nextId = nextId + 1;
-        setMessages([
-          ...messages,
-          {
-            id: nextId,
-            message: "change to use Europe account PK",
-          },
-        ]);
-      }
-    } else {
-      if (publicKey !== process.env.NEXT_PUBLIC_US_STRIPE_PK) {
-        setPublicKey(process.env.NEXT_PUBLIC_US_STRIPE_PK);
-        stripe._apiKey = process.env.NEXT_PUBLIC_US_STRIPE_PK;
-
-        nextId = nextId + 1;
-        setMessages([
-          ...messages,
-          {
-            id: nextId,
-            message: "change to use United States account PK",
-          },
-        ]);
-      }
-      if (currency !== "usd") {
-        setCurrency("usd");
-      }
-    }
+  const addNewMessage = (newMessage) => {
+    setMessages([...messages, newMessage]);
   };
 
   const options = {
@@ -94,7 +57,6 @@ export default function PaymentElementMultipleAccounts() {
     amount: 1099,
     currency: currency,
     appearance: { theme: "stripe" },
-    public_key: publicKey,
   };
 
   if (paymentComplete) {
@@ -112,16 +74,16 @@ export default function PaymentElementMultipleAccounts() {
       </h1>
       <Elements options={options} stripe={stripe}>
         <CheckoutForm
-          handleAddressUpdate={handleAddressUpdate}
           currency={currency}
           setCurrency={setCurrency}
           setPaymentComplete={setPaymentComplete}
+          addNewMessage={addNewMessage}
         />
       </Elements>
       <div className="bg-slate-200 rounded-md my-5 p-5">
-        {messages.map((m) => (
-          <p key={`msg-${m.id}`} className="text-slate-600">
-            {m.id}: {m.message}
+        {messages.map((value, index) => (
+          <p key={`msg-${index}`} className="text-slate-600">
+            {index}: {value.message}
           </p>
         ))}
       </div>

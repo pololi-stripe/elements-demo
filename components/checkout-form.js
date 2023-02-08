@@ -15,10 +15,10 @@ export const countryInEurope = (country) => {
 };
 
 export default function CheckoutForm({
-  handleAddressUpdate,
   currency,
   setCurrency,
   setPaymentComplete,
+  addNewMessage,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -26,6 +26,28 @@ export default function CheckoutForm({
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [address, setAddress] = React.useState({});
+
+  const handleAddressUpdate = (newAddress) => {
+    if (newAddress.country === address.country) {
+      return;
+    }
+
+    if (countryInEurope(newAddress.country)) {
+      stripe.update(process.env.NEXT_PUBLIC_EU_STRIPE_PK);
+      addNewMessage({
+        message: "call stripe.update() to use Europe account PK",
+      });
+    } else {
+      stripe.update(process.env.NEXT_PUBLIC_US_STRIPE_PK);
+      addNewMessage({
+        message: "call stripe.update() to use United States account PK",
+      });
+
+      if (currency !== "usd") {
+        setCurrency("usd");
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
