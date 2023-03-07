@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Layout from "../../components/layout";
 import TestModeBadge from "../../components/test-mode-badge";
-import CheckoutForm, { countryInEurope } from "../../components/checkout-form";
+import CheckoutForm from "../../components/checkout-form";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
@@ -36,7 +36,10 @@ const PaymentComplete = ({ messages }) => {
 };
 
 const stripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
-  betas: ["elements_enable_deferred_intent_beta_1"],
+  betas: [
+    "elements_enable_deferred_intent_beta_1",
+    "enable_stripe_update_api_key_beta_0",
+  ],
 });
 
 export default function PaymentElementMultipleAccounts() {
