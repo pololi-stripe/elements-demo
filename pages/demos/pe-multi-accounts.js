@@ -39,6 +39,7 @@ const stripe = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
   betas: [
     "elements_enable_deferred_intent_beta_1",
     "enable_stripe_update_api_key_beta_0",
+    "pay_button_element_beta_1",
   ],
 });
 

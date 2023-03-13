@@ -15,6 +15,12 @@ export default function Home() {
           &#10145;&#65039; Payment Element integration with multiple accounts
         </p>
       </Link>
+      <Link href="/demos/payment-request-demo">
+        <p>
+          &#10145;&#65039; Payment Request Button integration with multiple
+          accounts
+        </p>
+      </Link>
     </Layout>
   );
 }

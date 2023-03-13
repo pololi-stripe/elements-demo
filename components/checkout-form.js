@@ -1,4 +1,5 @@
 import {
+  PayButtonElement,
   PaymentElement,
   AddressElement,
   useStripe,
@@ -99,34 +100,44 @@ export default function CheckoutForm({
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <h2 className="text-xl mb-3 mt-3">1. Organization info</h2>
-      {countryInEurope(address.country) && (
-        <CurrencySelect currency={currency} setCurrency={setCurrency} />
-      )}
-      <AddressElement
-        options={{
-          mode: "billing",
-          display: { name: "organization" },
-        }}
-        onChange={(e) => {
-          setAddress(e.value.address);
-          handleAddressUpdate(e.value.address);
-        }}
+    <div id="checkout-page">
+      <PayButtonElement
+        onConfirm={handleSubmit}
+        options={{ wallets: { googlePay: "always" } }}
       />
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <h2 className="text-xl mb-3 mt-3">1. Organization info</h2>
+        {countryInEurope(address.country) && (
+          <CurrencySelect currency={currency} setCurrency={setCurrency} />
+        )}
+        <AddressElement
+          options={{
+            mode: "billing",
+            display: { name: "organization" },
+          }}
+          onChange={(e) => {
+            setAddress(e.value.address);
+            handleAddressUpdate(e.value.address);
+          }}
+        />
 
-      <h2 className="text-xl mb-3 mt-3">2. Payment method</h2>
-      <PaymentElement />
-      {isLoading || !stripe || !elements ? <LoadingButton /> : <SubmitButton />}
+        <h2 className="text-xl mb-3 mt-3">2. Payment method</h2>
+        <PaymentElement />
+        {isLoading || !stripe || !elements ? (
+          <LoadingButton />
+        ) : (
+          <SubmitButton />
+        )}
 
-      {message && (
-        <div
-          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-          role="alert"
-        >
-          {message}
-        </div>
-      )}
-    </form>
+        {message && (
+          <div
+            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            {message}
+          </div>
+        )}
+      </form>
+    </div>
   );
 }
