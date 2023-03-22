@@ -37,10 +37,13 @@ export default function PaymentRequestCheckoutForm({
   useEffect(() => {
     if (paymentRequest) {
       paymentRequest.off("paymentmethod");
+      const data = { currency };
       paymentRequest.on("paymentmethod", async (ev) => {
-        const response = await fetch("/api/create-intent", {}).then((res) =>
-          res.json()
-        );
+        const response = await fetch("/api/create-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }).then((res) => res.json());
         if (response.error) {
           addNewMessage({ message: "Fail to create PaymentIntent" });
           return;
