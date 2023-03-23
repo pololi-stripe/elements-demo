@@ -21,6 +21,9 @@ export default function Home() {
           accounts
         </p>
       </Link>
+      <Link href="/demos/link-demo">
+        <p>&#10145;&#65039; Link Demo with multiple accounts</p>
+      </Link>
     </Layout>
   );
 }
