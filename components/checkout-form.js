@@ -1,5 +1,4 @@
 import {
-  PayButtonElement,
   PaymentElement,
   AddressElement,
   useStripe,
@@ -101,10 +100,6 @@ export default function CheckoutForm({
 
   return (
     <div id="checkout-page">
-      <PayButtonElement
-        onConfirm={handleSubmit}
-        options={{ wallets: { googlePay: "always" } }}
-      />
       <form id="payment-form" onSubmit={handleSubmit}>
         <h2 className="text-xl mb-3 mt-3">1. Organization info</h2>
         {countryInEurope(address.country) && (
