@@ -24,6 +24,9 @@ export default function Home() {
       <Link href="/demos/link-demo">
         <p>&#10145;&#65039; Link Demo with multiple accounts</p>
       </Link>
+      <Link href="/demos/payment-request-api-demo">
+        <p>&#10145;&#65039; Payment Request API Demo</p>
+      </Link>
     </Layout>
   );
 }
