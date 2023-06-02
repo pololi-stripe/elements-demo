@@ -30,10 +30,19 @@ export default function PaymentRequestApiDemo() {
       });
 
       pr.on("paymentmethod", async (ev) => {
+        const response = await fetch("/api/create-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }).then((res) => res.json());
+        if (response.error) {
+          console.log("error", response.error);
+          return;
+        }
         // Confirm the PaymentIntent without handling potential next actions (yet).
         const { paymentIntent, error: confirmError } =
           await stripe.confirmCardPayment(
-            clientSecret,
+            response.client_secret,
             { payment_method: ev.paymentMethod.id },
             { handleActions: false }
           );
