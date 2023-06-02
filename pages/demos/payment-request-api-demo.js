@@ -33,7 +33,7 @@ export default function PaymentRequestApiDemo() {
         const response = await fetch("/api/create-intent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify({ currency: "usd" }),
         }).then((res) => res.json());
         if (response.error) {
           console.log("error", response.error);
