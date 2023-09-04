@@ -30,6 +30,9 @@ export default function Home() {
       <Link href="/demos/pe-pending-amount">
         <p>&#10145;&#65039; Payment Element with Unknown Amount upfront</p>
       </Link>
+      <Link href="/demos/custom-checkout-demo">
+        <p>&#10145;&#65039; Custom Checkout Demo</p>
+      </Link>
     </Layout>
   );
 }
