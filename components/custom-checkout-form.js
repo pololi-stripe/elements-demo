@@ -5,9 +5,6 @@ import CustomerDetails from "./customCheckout/CustomerDetails";
 import OrderSummary from "./customCheckout/OrderSummary";
 import PromotionCodes from "./customCheckout/PromotionCodes";
 import PayButton from "./customCheckout/PayButton";
-// import PayButton from "./PayButton";
-// import PromotionCodes from "./PromotionCodes";
-// import ShippingSelector from "./ShippingSelector";
 
 const CheckoutPage = () => {
   return (
