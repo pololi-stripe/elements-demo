@@ -11,8 +11,30 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
   betas: ["custom_checkout_beta_1"],
 });
 
+const PaymentComplete = () => {
+  return (
+    <Layout>
+      <Head>
+        <title>Demo</title>
+      </Head>
+      <h1 className="text-3xl mb-6">
+        <TestModeBadge />
+        Custom Checkout Demo
+      </h1>
+
+      <div
+        className="p-4 my-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+        role="alert"
+      >
+        Payment Succeed!
+      </div>
+    </Layout>
+  );
+};
+
 export default function CustomCheckoutDemo() {
   const [clientSecret, setClientSecret] = React.useState("");
+  const [paymentComplete, setPaymentComplete] = React.useState(false);
 
   React.useEffect(() => {
     // Create CheckoutSession as soon as the page loads
@@ -34,6 +56,10 @@ export default function CustomCheckoutDemo() {
     },
   };
 
+  if (paymentComplete) {
+    return <PaymentComplete />;
+  }
+
   return (
     <Layout>
       <Head>
@@ -45,7 +71,7 @@ export default function CustomCheckoutDemo() {
       </h1>
       {clientSecret && (
         <CustomCheckoutProvider options={options} stripe={stripePromise}>
-          <CustomCheckoutForm />
+          <CustomCheckoutForm setPaymentComplete={setPaymentComplete} />
         </CustomCheckoutProvider>
       )}
     </Layout>

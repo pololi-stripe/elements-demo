@@ -6,8 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@stripe/react-stripe-js": "^1.16.4",
-    "@stripe/stripe-js": "^1.46.0",
+    "@stripe/react-stripe-js": "^2.2.0",
+    "@stripe/stripe-js": "^2.1.2",
     "autoprefixer": "^10.4.13",
     "countries-list": "^2.6.1",
     "next": "^13.1.5",

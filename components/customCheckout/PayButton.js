@@ -1,16 +1,22 @@
 import { useCustomCheckout } from "@stripe/react-stripe-js";
 
-export default function () {
+export default function ({ setPaymentComplete }) {
   const { confirm, canConfirm, confirmationRequirements } = useCustomCheckout();
+  const handleConfirm = async () => {
+    await confirm();
+    setPaymentComplete(true);
+  };
 
   return (
     <div className="space-y-2 mt-5">
       <button
-        disabled={!true}
-        onClick={() => confirm()}
+        disabled={!canConfirm}
+        onClick={handleConfirm}
         className={`px-4 py-2 bg-blue-500 text-white rounded-lg transition duration-200 ease-in-out   
                 ${
-                  !true ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+                  !canConfirm
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-blue-600"
                 }`}
       >
         Pay

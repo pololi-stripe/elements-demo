@@ -6,7 +6,7 @@ import OrderSummary from "./customCheckout/OrderSummary";
 import PromotionCodes from "./customCheckout/PromotionCodes";
 import PayButton from "./customCheckout/PayButton";
 
-const CheckoutPage = () => {
+const CheckoutPage = ({ setPaymentComplete }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-800 py-4">
@@ -25,7 +25,7 @@ const CheckoutPage = () => {
       <AddressElement options={{ mode: "billing" }} />
       <h1 className="text-3xl font-bold text-gray-800 py-4">Payment Details</h1>
       <PaymentElement />
-      <PayButton />
+      <PayButton setPaymentComplete={setPaymentComplete} />
     </div>
   );
 };
