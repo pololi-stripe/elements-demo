@@ -33,6 +33,9 @@ export default function Home() {
       <Link href="/demos/custom-checkout-demo">
         <p>&#10145;&#65039; Custom Checkout Demo</p>
       </Link>
+      <Link href="/demos/ece-demo">
+        <p>&#10145;&#65039; Express Checkout Element Demo</p>
+      </Link>
     </Layout>
   );
 }
