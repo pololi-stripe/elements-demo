@@ -194,6 +194,7 @@ export default function EceDemo() {
     amount: 1099,
     currency: "usd",
     appearance: { theme: "stripe" },
+    paymentMethodCreation: "manual",
   };
 
   return (
