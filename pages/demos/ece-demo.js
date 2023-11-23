@@ -116,14 +116,14 @@ const ChecoutPage = () => {
     const res = await fetch("/api/create-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mode: "payment" }),
+      body: JSON.stringify({ mode: "payment", currency: "usd" }),
     });
     const { client_secret: clientSecret } = await res.json();
 
     const { error: confirmError } = await stripe.confirmPayment({
       clientSecret,
       confirmParams: {
-        return_url: "https://example.com/order/123/complete",
+        return_url: window.location.origin,
       },
     });
 
