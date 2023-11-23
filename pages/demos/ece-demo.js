@@ -116,7 +116,11 @@ const ChecoutPage = () => {
     const res = await fetch("/api/create-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mode: "payment", currency: "usd" }),
+      body: JSON.stringify({
+        mode: "payment",
+        currency: "usd",
+        paymentMethodId: paymentMethod.id,
+      }),
     });
     const { client_secret: clientSecret } = await res.json();
 
