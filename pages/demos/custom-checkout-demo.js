@@ -1,5 +1,5 @@
 import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import { CustomCheckoutProvider } from "@stripe/react-stripe-js";
 
 import CustomCheckoutForm from "../../components/custom-checkout-form";
@@ -7,7 +7,7 @@ import Layout from "../../components/layout";
 import Head from "next/head";
 import TestModeBadge from "../../components/test-mode-badge";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
+const stripePromise = Stripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
   betas: [
     "custom_checkout_beta_1",
     "custom_checkout_ece_beta_1",

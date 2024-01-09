@@ -10,6 +10,7 @@ export default function Layout({ children, home }) {
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="og:title" content={siteTitle} />
+        <script src="https://pololi-stripejs.tunnel.stripe.me/fingerprinted/js/stripe.js" />
       </Head>
       <main>{children}</main>
       {!home && (
