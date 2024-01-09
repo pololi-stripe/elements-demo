@@ -1,6 +1,10 @@
 import React from "react";
 
-import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
+import {
+  AddressElement,
+  PaymentElement,
+  ExpressCheckoutElement,
+} from "@stripe/react-stripe-js";
 import CustomerDetails from "./customCheckout/CustomerDetails";
 import OrderSummary from "./customCheckout/OrderSummary";
 import PromotionCodes from "./customCheckout/PromotionCodes";
@@ -9,6 +13,7 @@ import PayButton from "./customCheckout/PayButton";
 const CheckoutPage = ({ setPaymentComplete }) => {
   return (
     <div>
+      <ExpressCheckoutElement />
       <h1 className="text-3xl font-bold text-gray-800 py-4">
         Customer details
       </h1>
