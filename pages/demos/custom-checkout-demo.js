@@ -8,11 +8,7 @@ import Head from "next/head";
 import TestModeBadge from "../../components/test-mode-badge";
 
 const stripePromise = Stripe(process.env.NEXT_PUBLIC_US_STRIPE_PK, {
-  betas: [
-    "custom_checkout_beta_1",
-    "custom_checkout_ece_beta_1",
-    "ece_apple_pay_billing_address_event_beta_1",
-  ],
+  betas: ["custom_checkout_beta_2"],
 });
 
 const PaymentComplete = () => {

@@ -4,16 +4,16 @@ const stripe = require("stripe")(process.env.US_STRIPE_SK, {
 
 let lastCheckoutSession = null;
 const getCachedSession = async () => {
-  // if (lastCheckoutSession) {
-  //   const session = await stripe.checkout.sessions.retrieve(
-  //     lastCheckoutSession
-  //   );
-  //   if (session.status === "open") {
-  //     return session;
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  if (lastCheckoutSession) {
+    const session = await stripe.checkout.sessions.retrieve(
+      lastCheckoutSession
+    );
+    if (session.status === "open") {
+      return session;
+    } else {
+      return null;
+    }
+  }
   return null;
 };
 
