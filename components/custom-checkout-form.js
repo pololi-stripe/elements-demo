@@ -1,12 +1,20 @@
 import React from "react";
 
-import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
+import {
+  AddressElement,
+  PaymentElement,
+  useCustomCheckout,
+} from "@stripe/react-stripe-js";
 import CustomerDetails from "./customCheckout/CustomerDetails";
 import OrderSummary from "./customCheckout/OrderSummary";
 import PromotionCodes from "./customCheckout/PromotionCodes";
 import PayButton from "./customCheckout/PayButton";
 
 const CheckoutPage = ({ setPaymentComplete }) => {
+  const cc = useCustomCheckout();
+  React.useEffect(() => {
+    console.log("session", cc);
+  }, [cc]);
   return (
     <div>
       {/* <ExpressCheckoutElement /> */}
